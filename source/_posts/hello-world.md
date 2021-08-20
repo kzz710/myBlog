@@ -1,7 +1,8 @@
 ---
 title: Hello World
 categories: 小技术
-cover: http://wx1.sinaimg.cn/large/dc58f491ly1fepmxueo9tj21jk10ugwc.jpg
+date: '2021-08-15'
+cover: http://gss0.baidu.com/-Po3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/32fa828ba61ea8d3d63e3c569d0a304e251f5847.jpg
 
 ---
 Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).

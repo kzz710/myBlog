@@ -5,5 +5,5 @@ tags:
     - vue 
     - 单页面 
     - 路由
-cover: http://wx4.sinaimg.cn/large/dc58f491ly1fepmxv27yfj20sg0hsjww.jpg
+cover: http://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/32fa828ba61ea8d3ef5ed4599c0a304e251f586a.jpg
 ---
