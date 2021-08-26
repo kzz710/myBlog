@@ -1,7 +1,7 @@
 ---
-title: Hello World
+title: blog搭建流程
 categories: 小技术
-date: '2021-08-15'
+date: '2021-08-08'
 cover: http://gss0.baidu.com/-Po3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/32fa828ba61ea8d3d63e3c569d0a304e251f5847.jpg
 
 ---
@@ -40,3 +40,6 @@ $ hexo deploy
 ```
 
 More info: [Deployment](https://hexo.io/docs/one-command-deployment.html)
+
+### 云游的小安利搭建详细教程
+[云游的小安利搭建详细教程](https://www.yunyoujun.cn/share/how-to-build-your-site/)
