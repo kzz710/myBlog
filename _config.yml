@@ -103,6 +103,6 @@ theme: flex-block
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://github.com/kzz710/kzz710.github.io.git
+  repo: git@github.com:kzz710/kzz710.github.io.git
   branch: master
   message: 项目第二次提交
