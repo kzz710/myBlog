@@ -2,7 +2,7 @@
 title: blog搭建流程
 categories: 小技术
 date: '2021-08-08'
-cover: http://gss0.baidu.com/-Po3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/32fa828ba61ea8d3d63e3c569d0a304e251f5847.jpg
+cover:   https://s4.ax1x.com/2022/01/13/7QjtXQ.png
 
 ---
 Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).

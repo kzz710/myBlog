@@ -5,7 +5,7 @@ tags:
     - vue 
     - 单页面 
     - 路由
-cover: http://gss0.baidu.com/9fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/32fa828ba61ea8d3ef5ed4599c0a304e251f586a.jpg
+cover:https://s4.ax1x.com/2022/01/13/7QjBt0.png
 ---
 ## 原理分析
 1、VueRouter是一个插件类，能够被Vue.use()调用，即类的内部有一个静态方法install  

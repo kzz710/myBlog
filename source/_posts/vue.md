@@ -5,7 +5,7 @@ tags:
  - vue
  - 双向绑定
  - 观察者模式
-cover: http://i0.hdslb.com/bfs/article/62ab79fcd20d1368b8039a78f16adbaa1e9b8d35.jpg
+cover: https://s4.ax1x.com/2022/01/13/7Qja0s.png
 ---
 ## vue响应式原理分析
 ![](https://img.cmvideo.cn/publish/noms/2021/08/18/1O32J6GFE0LJH.png)

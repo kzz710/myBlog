@@ -3,7 +3,7 @@ title: basicJs
 date: 2022-01-11 10:43:11
 tags: 
 - js
-cover: https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201807%2F30%2F20180730192202_vixnn.thumb.1000_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1644461106&t=894d90c7876444bdcb1a483421a8ad49
+cover: https://s4.ax1x.com/2022/01/13/7QjJ1S.png
 ---
 
 ## js基础知识
@@ -347,3 +347,49 @@ console.log(cat instanceof Animal); // true
 1、解决了两次调用父类的构造函数  
 缺点：  
 1、实现较为复杂
+
+### 九、EventLoop (事件循环)
+JS是单线程的，为了防止一个函数的执行事件过长阻塞后面的代码，所以会先把同步代码压入执行栈中，依次执行，将异步代码推入异步队列，当执行栈中没有执行任务时，EventLoop开始工作，将异步队列中的任务依次压入执行栈中执行，直到所有异步队列执行完毕。
+![](https://s4.ax1x.com/2022/01/13/7QcOG6.png)
+![](https://s4.ax1x.com/2022/01/13/7Qgliq.png)
+注意：  
+1、js是单线程的，但是浏览器是多线程的，执行异步任务是异步线程执行  
+2、异步任务也分为宏任务和微任务，微任务优先宏任务执行，微任务队列的代表：Promise.then,MutationObserver。宏任务的代表：setTimeout,setInterval,setImmediate  
+
+### 十、事件冒泡、捕获、委托
+DOM事件流：事件捕获、处于目标阶段、事件冒泡  
+事件委托：就是利用事件冒泡机制，将事件绑定在目标DOM的父级上，触发执行效果  
+事件委托的优势：1、减少DOM操作，提高性能。2、随时可以添加子元素，添加的子元素会自动有相应的处理事件  
+
+### 十一、原生AJAX
+```javascript
+var Ajax = {
+    get: function (url, callback) {
+        // XMLHttpRequest对象用于在后台与服务器交换数据
+        var xhr = new XMLHttpRequest();
+        //参数说明：方法名GET/POST   请求地址   async 请求进行异步还是同步，true服务器响应时执行其他脚本，false是等待服务器响应再执行
+        xhr.open('GET', url, false);
+        xhr.onreadystatechange = function () {
+            // readyState == 4说明请求已完成
+            if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) {
+                // 从服务器获得数据
+                callback(xhr.responseText)
+            }
+        }
+        xhr.send();
+    },
+    post: function (url, data, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST',url, false);
+        xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200 || xhr.status == 304) {
+                    callback(xhr.responseText);
+                }
+            }
+        }
+        xhr.send(data);
+    }
+}
+```

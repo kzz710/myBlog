@@ -3,7 +3,7 @@ title: promise原理剖析及模拟实现
 date: 2021-08-10 18:39:37
 tags: 
     - promise 
-cover: http://ww3.sinaimg.cn/large/d2e27164gw1fbmwbgf0mij21hc0u0487.jpg
+cover: https://s4.ax1x.com/2022/01/13/7Qjd7n.png
 ---
 
 ## promise原理解析及模拟实现
