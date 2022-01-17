@@ -218,6 +218,12 @@ __3.BFC可以阻止元素被浮动的元素覆盖__
 ```
 ![](https://pic3.zhimg.com/v2-5ebd48f09fac875f0bd25823c76ba7fa_r.jpg)
 
+### 清除浮动的几种方式
+1、clear:both  
+2、浮动元素后添加一个块级元素，添加属性clear:both  
+3、利用BFC原理  
+4、利用伪元素(before、after)
+
 ### DOM、BOM对象
 javascript由ECMAScript、BOM、DOM组成。  
 

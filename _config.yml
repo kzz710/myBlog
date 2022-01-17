@@ -3,8 +3,8 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: blog
-subtitle: ''
+title: 'myBlog'
+subtitle: '业精于勤荒于嬉'
 description: '每天进步一点点'
 keywords:
 author: kuangzz
@@ -105,4 +105,4 @@ deploy:
   type: git
   repo: git@github.com:kzz710/kzz710.github.io.git
   branch: master
-  message: 项目第二次提交
+  message: 项目es6知识第一次提交

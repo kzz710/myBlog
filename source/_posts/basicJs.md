@@ -393,3 +393,104 @@ var Ajax = {
     }
 }
 ```
+
+### 十二、js深拷贝和浅拷贝
+如何区分浅拷贝和深拷贝，简单来说，假设B复制A，当修改A的引用数据时，看B是否发生改变，如果B跟着变了，就是浅拷贝，如果没变就是深拷贝  
+浅拷贝的方式：  
+1、直接=赋值  
+2、for in  
+3、Object.assign()  
+
+深拷贝的方式：  
+1、采用递归去拷贝所有层级的属性
+```javascript
+function deepClone(obj) {
+    let objClone = Array.isArray(obj) ? []: {}
+    if (typeof obj === 'object') {
+        Object.keys(obj).forEach(key => {
+            if (obj[key] && typeof obj[key] === 'object') {
+                objClone[key] = deepClone(obj[key])
+            } else {
+                objClone[key] = obj[key]
+            }
+        })
+    } else {
+        objClone = obj
+    }
+    return objClone;
+}
+
+let a = {
+    name: 'zs',
+    age: 18,
+    son: {
+        name: 'ls',
+        age: 1
+    }
+}
+let b = deepClone(a) //深拷贝
+let c = Object.assign({}, a); //浅拷贝
+let d = a; //浅拷贝
+let e = {};
+for (let key in a) { //浅拷贝
+    e[key] = a[key]
+}
+a.son.name = 'zs';
+console.log(a); // { name: 'zs', age: 18, son: { name: 'zs', age: 1 } }
+console.log(b); // { name: 'zs', age: 18, son: { name: 'ls', age: 1 } }
+console.log(c); // { name: 'zs', age: 18, son: { name: 'zs', age: 1 } }
+console.log(d); // { name: 'zs', age: 18, son: { name: 'zs', age: 1 } }
+console.log(e); // { name: 'zs', age: 18, son: { name: 'zs', age: 1 } }
+```
+
+2、才用JSON的方法
+```javascript
+let a = {
+    name: 'zs',
+    age: 18,
+    son: {
+        name: 'ls',
+        age: 1
+    }
+}
+let b = JSON.parse(JSON.stringify(a));
+a.son.name = 'ww';
+console.log(a); // { name: 'zs', age: 18, son: { name: 'ww', age: 1 } }
+console.log(b); // { name: 'zs', age: 18, son: { name: 'ls', age: 1 } }
+
+//缺点：无法复制方法属性
+
+let a1 = {
+    name: 'zs',
+    age: 18,
+    son: {
+        name: 'ls',
+        age: 1
+    },
+    say() {
+        console.log('hello')
+    }
+}
+let b1 = JSON.parse(JSON.stringify(a1));
+a1.son.name = 'ww';
+console.log(a1); // { name: 'zs',age: 18,son: { name: 'ww', age: 1 },say: [Function: say] }
+console.log(b1); // { name: 'zs', age: 18, son: { name: 'ls', age: 1 } }
+```
+
+3、利用jQuery的extend方法
+```javascript
+let arr = [1,2,3,4]
+let newArr = $.extend(true, [], arr) // true为深拷贝，false为浅拷贝
+```
+
+4、loadsh函数库实现
+```javascript
+let obj = {
+    name: 'z1',
+    son: {
+        name: 'zs'
+    }
+}
+let result = _.cloneDeep(obj);
+```
+
