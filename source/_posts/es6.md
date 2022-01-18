@@ -96,7 +96,7 @@ console.log(name, age); // zhangsan 15
 
 const name1 = 'lisi';
 
-const {name1: name2, age, sex='man'} = obj;
+const {name: name2, age, sex='man'} = obj;
 
 console.log(name1, name2, age, sex); // lisi zhangsan 15 man
 ```
@@ -185,4 +185,108 @@ let o1 = o.replaceAll('b', '_');
 console.log(o) // 'abbcc'
 console.log(o1) // 'a__cc'
 ```
+
+### 七、箭头函数
+__1、箭头函数中this是在定义是绑定的，而不是调用时。（箭头函数的this值继承自外围作用域。运行时它会首先到它的父级作用域找，如果父级作用域还是箭头函数，那么接着向上找，直到找到我们要的this指向）__
+```javascript
+var a1 = 'ppp'
+
+var obj1 = {
+    a1: 'bbb',
+    b2: this.a1,
+    f: function () {
+        console.log(this.a1)
+    },
+    d: () => {
+        console.log(this.a1)
+    }
+}
+console.log(obj1.b2) // ‘ppp’
+obj1.f(); // ‘bbb’
+obj1.d(); // 'ppp'
+```
+__2、箭头函数不能作为构造函数，不能使用new__  
+```javascript
+//构造函数如下：
+function Person(p){
+    this.name = p.name;
+}
+//如果用箭头函数作为构造函数，则如下
+var Person = (p) => {
+    this.name = p.name;
+}
+```
+由于this必须是实例对象，而箭头函数是没有实例的，此处的this指向window，不能产生person的实例，自相矛盾  
+
+__3、箭头函数没有arguments、caller、callee__  
+箭头函数本身没有arguments,如果箭头函数在一个function内部，它会将外部函数的arguments拿过来使用。  
+箭头函数中要想接手不定参数，应该使用rest参数...解决
+```javascript
+let B = (b)=>{
+  console.log(arguments);
+}
+B(2,92,32,32);   // Uncaught ReferenceError: arguments is not defined
+
+let C = (...c) => {
+  console.log(c);
+}
+C(3,82,32,11323);  // [3, 82, 32, 11323]
+```
+
+__4、箭头函数通过call和apply调用，不会改变this指向，只会传入参数__  
+```javascript
+var name = 'lw'
+let a1 = {
+    name: 'zs',
+    f: function (age) {
+        console.log(`我是${this.name},年龄${age}`)
+    },
+    d: (age) => {
+        console.log(`我是${this.name},年龄${age}`)
+    }
+}
+
+let a2 = {
+    name: 'ls'
+}
+
+a1.f(15); // 我是zs,年龄15
+a1.d(15); // 我是lw,年龄15
+a1.f.call(a2, 18); // 我是ls,年龄18
+a1.d.call(a2, 18); // 我是lw,年龄18
+```
+
+__5、箭头函数没有原型属性__  
+```javascript
+var A = function () {
+    return 2
+}
+
+var B = () => {
+    return 3
+}
+
+console.log(A.prototype) // {constructor: ƒ}
+console.log(B.prototype) // undefined
+```
+
+__6、箭头函数ES6 class中声明的方法为实例方法，不是原型方法__  
+```javascript
+class Super {
+    sayHello() {
+        console.log('hello')
+    }
+    sayWorld = () => {
+        console.log('world')
+    }
+}
+const a = new Super();
+const b = new Super();
+
+console.log(a.sayHello === b.sayHello) // true sayHello是Super.prototype上的方法，所有实例共享同一个方法，所以为true
+console.log(a.sayWorld === b.sayWorld) // false sayWorld是各自实例上的方法，所以每个方法不一样，估为false
+console.log(Super.prototype)
+
+```
+
 
