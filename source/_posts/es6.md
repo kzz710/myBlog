@@ -289,4 +289,439 @@ console.log(Super.prototype)
 
 ```
 
+### 八、Proxy代理
+```javascript
+const person = {
+    name: 'zs',
+    age: 18
+}
 
+const personProxy = new Proxy(person, {
+    get(target, key, receiver) {
+        console.log(target, key, receiver)
+        return key in target ? target[key] : 'default';
+    },
+    set(target, key, value, receiver) {
+        console.log(target, key, value, receiver)
+        if (typeof value !== 'number') {
+            throw new TypeError('age need number');
+        }
+        target[key] = value;
+    }
+})
+
+console.log(person.name) // {name: 'zs', age: 18}  'name'  Proxy{name: 'zs', age: 18}  zs
+console.log(person.sex) // {name: 'zs', age: 18}  'sex'  Proxy{name: 'zs', age: 18}  default
+console.log(person.age) // {name: 'zs', age: 18}  'age'  Proxy{name: 'zs', age: 18}  18
+person.age = 19  // // {name: 'zs', age: 18}  'age'  19  Proxy{name: 'zs', age: 18}  
+person.age = '20';  // {name: 'zs', age: 19}  'age'  '20'  Proxy{name: 'zs', age: 19}  报错Uncaught TypeError: age need number
+
+
+const list = [1,2,3]
+const listProxy = new Proxy(list, {
+    get(target, key, receiver) {
+        console.log('get')
+        return target[key]
+    },
+    set(target, key, value, receiver) {
+        console.log('set')
+        target[key] = value;
+        return true; // 表示设置成功
+    },
+    deleteProperty(target, key) {
+        console.log('delete')
+    }
+})
+console.log(listProxy[0]);
+console.log(listProxy.push(100));
+console.log(listProxy.shift())
+listProxy[0] = 999
+```
+Proxy代理 vs Object.defineProperty()  
+1、Object.defineProperty()只能监听对象的读写操作  而Proxy能监听更多的操作，比如deleteProperty、has等  
+2、Proxy能监听数组的操作  
+3、Proxy是以非侵入式的监管对象，不会对原对象进行任何的操作
+
+### 八、Reflect
+Reflect提供了对象统一操作API
+```javascript
+const person = {
+    name: 'zs',
+    age: 19
+}
+function Person() {
+    this.name = 'ls';
+    this.age = 20;
+}
+Person.prototype.say = function () {
+    console.log('hello world')
+}
+const p = new Person();
+console.log(Reflect.get(person, 'name'))  // zs
+console.log(Reflect.ownKeys(person)) // ['name', 'age']  只能访问对象上的属性，不能访问原型上的
+console.log(Reflect.ownKeys(p)) // ['name', 'age']
+console.log(Reflect.set(person, 'age', 20)) // true 表示操作成功
+console.log(Reflect.has(person, 'sex')) // false
+console.log(Reflect.deleteProperty(person, 'age')) // true 表示操作成功
+```
+
+### 九、set和map
+1、set数据结构 返回一个没有重复值的集合  
+```javascript
+const s = new Set()
+s.add('a').add('b').add(3).add(4).add(5).add(5);
+
+s.forEach(i => console.log(i))  // a b 3 4 5
+
+for (let i of s) {
+    console.log(i) // a b 3 4 5
+}
+
+console.log(s) // Set(5){'a', 'b', 3, 4, 5}
+console.log(s.size) // 5
+console.log(s.has('a')) // true
+console.log(s.has(100)) // false
+console.log(s.delete(5)) // true 表示操作成功 删除5
+console.log(s) // Set(4){'a', 'b', 3, 4}
+console.log(s.clear()) // undefined
+console.log(s) // Set(0){size: 0}
+
+// 数组去重
+const array = [1,3,2,3,1,5,6,1,5];
+const newArr = [...new Set(array)]
+console.log(newArr) // [1, 3, 2, 5, 6]
+```
+2、map数据结构 键值对数据结构
+```javascript
+// 传统键值对象，会将key不是字符串的值转变为字符串
+const obj = {};
+obj[123] = 'value';
+obj[true] = 'value';
+obj[{name:'zs'}] = 'value';
+obj['zzh'] = 'value';
+console.log(Reflect.ownKeys(obj)) // ['123', 'true', '[object Object]', 'zzh']
+
+// map对象，会将key的数据类型保留
+const t = {
+    name: 'kzz'
+}
+const m = new Map();
+m.set(t, 'a');
+m.set(true, 'b');
+m.set(123, 'c');
+console.log(m); // {{…} => 'a', true => 'b', 123 => 'c'}
+console.log(m.get(t)) // a
+console.log(m.get(true)) // b
+m.forEach((i, k) => console.log(i, k)) // a {name: 'kzz'}  b true  c 123
+```
+
+### 十、class
+1、ES6的类，完全可以看成构造函数的另外一种写法  
+```javascript
+class Point {
+  // ...
+}
+
+typeof Point // "function"
+Point === Point.prototype.constructor  // true
+```
+2、类的方法都是定义在prototype对象上（箭头函数方法是定义在实例上）  
+3、类的内部定义的方法，都是不可枚举的,这和ES5的行为不一致
+```javascript
+class Point {
+  constructor(x, y) {
+    // ...
+  }
+
+  toString() {
+    // ...
+  }
+}
+
+Object.keys(Point.prototype)
+// []
+Object.getOwnPropertyNames(Point.prototype)
+// ["constructor","toString"]
+```
+4、constructor方法是类的默认方法，通过new对象创建实例时，会自动调用该方法。一个类必定有constructor方法，如果没有显式定义，一个空的constructor方法会默认被添加  
+```javascript
+class Point {
+}
+
+// 等同于
+class Point {
+  constructor() {}
+}
+```
+5、constructor方法默认返回实例对象（this）,完全可以指定返回另外一个对象
+```javascript
+class Foo {
+  constructor() {
+    return Object.create(null);
+  }
+}
+
+new Foo() instanceof Foo
+// false
+// constructor返回一个全新的对象，结果导致实例对象不是Foo的实例
+```
+6、静态方法  
+类相当于实例的原型，所有在类中定义的方法，都会被实例继承，如果在一个方法前加上static关键字，就表示该方法不会被实例继承，而是直接通过类来调用，这就称为静态方法
+```javascript
+class Foo {
+  static classMethod() {
+    return 'hello';
+  }
+}
+
+Foo.classMethod() // 'hello'
+
+var foo = new Foo();
+foo.classMethod()
+// TypeError: foo.classMethod is not a function
+```
+如果静态方法中包含关键字this,这个this指向的是类而不是实例
+```javascript
+class Foo {
+  static bar() {
+    this.baz();
+  }
+  static baz() {
+    console.log('hello');
+  }
+  baz() {
+    console.log('world');
+  }
+}
+
+Foo.bar() // hello
+```
+父类的静态方法能被子类继承
+```javascript
+class Foo {
+  static classMethod() {
+    return 'hello';
+  }
+}
+
+class Bar extends Foo {
+}
+
+Bar.classMethod() // 'hello'
+```
+
+7、静态属性  
+使用static 声明的属性就是静态属性，由类调用
+
+### 十一、类的继承
+1、class可以通过extends关键字实现继承
+```javascript
+class Point {
+}
+
+class ColorPoint extends Point {
+  constructor(x, y, color) {
+    super(x, y); // 调用父类的constructor(x, y)
+    this.color = color;
+  }
+
+  toString() {
+    return this.color + ' ' + super.toString(); // 调用父类的toString()
+  }
+}
+```
+上述代码中，constructor和toString方法之后，都出现了super关键字，它在这里表示父类的构造函数，用来新建父类的实例  
+子类必须在constructor方法中调用super方法，否则新建实例时会报错。这是因为子类自己的this对象，必须先通过父类的构造函数完成塑造，得到与父类同样的实例属性和方法，然后再对其进行加工，加上子类自己的实例属性和方法。如果不调用super方法，子类就得不到this对象。  
+```javascript
+class Point { /* ... */ }
+
+class ColorPoint extends Point {
+  constructor() {
+  }
+}
+
+let cp = new ColorPoint(); //ReferenceError
+```
+ES6的继承机制实质上是将父类的实例对象的属性和方法，加在this上面，所以必须先调用super方法，然后再用子类的构造函数修改this  
+如果子类没有定义constructor方法，这个方法会被默认添加
+```javascript
+class ColorPoint extends Point {
+}
+
+// 等同于
+class ColorPoint extends Point {
+  constructor(...args) {
+    super(...args);
+  }
+}
+```
+在子类的constructor方法没有调用super之前，就使用this关键字，结果报错
+```javascript
+class Point {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+class ColorPoint extends Point {
+  constructor(x, y, color) {
+    this.color = color; // ReferenceError
+    super(x, y);
+    this.color = color; // 正确
+  }
+}
+```
+
+2、super关键字
+super关键字既可以当做函数使用，也可以当做对象使用  
+
+第一种情况，super作为构造函数使用，代表父类的构造函数，ES6要求，子类的构造函数必须执行一次super函数
+```javascript
+class A {}
+
+class B extends A {
+  constructor() {
+    super();
+  }
+}
+```
+注意，super虽然代表了父类的构造函数，但是返回是子类B的实例，即super内部的this指向的是B的实例，因此super()相当于A.prototype.constructor.call(this)。  
+
+第二种情况，super作为对象，在普通方法中指向父类的原型对象，在静态方法中，指向父类  
+```javascript
+class A {
+  p() {
+    return 2;
+  }
+}
+
+class B extends A {
+  constructor() {
+    super();
+    console.log(super.p()); // 2
+  }
+}
+
+let b = new B();
+```
+上面代码中，子类B当中的super.p()，就是将super当做一个对象。这是super在普通方法中，指向A.prototype，所以super.p()相当于A.prototype.p()。  
+
+注意：这里的super指向的是父类的原型对象，所以定义在父类实例上的方法和属性，是无法通过super调用的
+```javascript
+class A {
+  constructor() {
+    this.p = 2;
+  }
+}
+
+class B extends A {
+  get m() {
+    return super.p;
+  }
+}
+
+let b = new B();
+b.m // undefined
+```
+
+ES6规定，在子类的普通方法中通过super调用父类的方法时，方法内部this指向当前子类的实例  
+```javascript
+class A {
+  constructor() {
+    this.x = 1;
+  }
+  print() {
+    console.log(this.x);
+  }
+}
+
+class B extends A {
+  constructor() {
+    super();
+    this.x = 2;
+  }
+  m() {
+    super.print();
+  }
+}
+
+let b = new B();
+b.m() // 2
+```
+上面代码中，super.print()虽然调用的是A.prototype.print()，但是A.prototype.print()内部的this指向子类B的实例，导致输出的是2，而不是1。也就是说，实际上执行的是super.print.call(this)。  
+
+由于this指向子类实例，所以如果通过super对某个属性赋值，这时super就是this，赋值的属性会变成子类实例的属性。  
+```javascript
+class A {
+  constructor() {
+    this.x = 1;
+  }
+}
+
+class B extends A {
+  constructor() {
+    super();
+    this.x = 2;
+    super.x = 3;
+    console.log(super.x); // undefined
+    console.log(this.x); // 3
+  }
+}
+
+let b = new B();
+```
+上面代码中，super.x赋值为3，这时等同于对this.x赋值为3。而当读取super.x的时候，读的是A.prototype.x，所以返回undefined。
+
+如果super作为对象，用在静态方法之中，这时super将指向父类，而不是父类的原型对象。
+```javascript
+class Parent {
+  static myMethod(msg) {
+    console.log('static', msg);
+  }
+
+  myMethod(msg) {
+    console.log('instance', msg);
+  }
+}
+
+class Child extends Parent {
+  static myMethod(msg) {
+    super.myMethod(msg);
+  }
+
+  myMethod(msg) {
+    super.myMethod(msg);
+  }
+}
+
+Child.myMethod(1); // static 1
+
+var child = new Child();
+child.myMethod(2); // instance 2
+```
+
+在子类的静态方法中通过super调用父类的方法时，方法内部的this指向当前的子类，而不是子类的实例。  
+```javascript
+class A {
+  constructor() {
+    this.x = 1;
+  }
+  static print() {
+    console.log(this.x);
+  }
+}
+
+class B extends A {
+  constructor() {
+    super();
+    this.x = 2;
+  }
+  static m() {
+    super.print();
+  }
+}
+
+B.x = 3;
+B.m() // 3
+```
