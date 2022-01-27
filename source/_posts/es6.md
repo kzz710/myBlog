@@ -310,11 +310,11 @@ const personProxy = new Proxy(person, {
     }
 })
 
-console.log(person.name) // {name: 'zs', age: 18}  'name'  Proxy{name: 'zs', age: 18}  zs
-console.log(person.sex) // {name: 'zs', age: 18}  'sex'  Proxy{name: 'zs', age: 18}  default
-console.log(person.age) // {name: 'zs', age: 18}  'age'  Proxy{name: 'zs', age: 18}  18
-person.age = 19  // // {name: 'zs', age: 18}  'age'  19  Proxy{name: 'zs', age: 18}  
-person.age = '20';  // {name: 'zs', age: 19}  'age'  '20'  Proxy{name: 'zs', age: 19}  报错Uncaught TypeError: age need number
+console.log(personProxy.name) // {name: 'zs', age: 18}  'name'  Proxy{name: 'zs', age: 18}  zs
+console.log(personProxy.sex) // {name: 'zs', age: 18}  'sex'  Proxy{name: 'zs', age: 18}  default
+console.log(personProxy.age) // {name: 'zs', age: 18}  'age'  Proxy{name: 'zs', age: 18}  18
+personProxy.age = 19  // // {name: 'zs', age: 18}  'age'  19  Proxy{name: 'zs', age: 18}  
+personProxy.age = '20';  // {name: 'zs', age: 19}  'age'  '20'  Proxy{name: 'zs', age: 19}  报错Uncaught TypeError: age need number
 
 
 const list = [1,2,3]
