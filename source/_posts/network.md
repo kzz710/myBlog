@@ -143,5 +143,25 @@ __cache-control的值__
 __浏览器缓存流程__  
 ![](https://s4.ax1x.com/2022/02/14/H6nSFP.png)
 
+### 八、同源策略
+同源是指“协议+域名+端口”三种相同，同源策略就是一个域下的js脚本未经允许的情况下，不允许访问另一个域下的内容，只允许访问同源下的内容。
+
+跨域通信的几种方式：  
+1、jsonp(利用script标签没有跨域限制的漏洞实现，缺点：只支持get请求)  
+2、CORS(设置Access-Control-Allow-Origin,指定可访问资源的域名)  
+3、postMessage(页面内嵌iframe消息传递，通过onMessage监听传递过来的数据)  
+4、websocket通信  
+5、Node中间件代理  
+6、Nginx反向代理  
+7、document.domain + iframe跨域
+
+### 九、本地存储的共同点和不同点
+共同点：都是保存在浏览器端，且同源的  
+
+不同点：  
+1、cookie数据始终在同源的http请求中携带（即使不需要），即cookie在浏览器和服务器来回传递。sessionStorage和localStorage不会自动把数据发给服务器，仅本地保存。  
+2、储存大小限制也不同，cookie数据不能超过4K，sessionStorage和localStorage可以达到5M。
+3、有效期不同，sessionStorage仅在当前浏览器窗口关闭之前有效，localStorage始终有效，cookie只在过期时间之前有效，即使窗口关闭或浏览器关闭。
+4、作用域不同，sessionStorage在当前浏览器窗口共享，localStorage在所有同源窗口中共享，cookie也是在所有同源窗口中共享
 
 
