@@ -105,4 +105,4 @@ deploy:
   type: git
   repo: git@github.com:kzz710/kzz710.github.io.git
   branch: master
-  message: 新增code知识
+  message: 新增typescript知识
